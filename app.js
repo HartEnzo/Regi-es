@@ -1,50 +1,82 @@
-const prompt = require('prompt-sync')();
-function cadastrarPaisEstadoCidade() {
-    let pais = "";
-    const estados = [];
-    
-    pais = prompt("Digite o nome do país:");
-    
-    let adicionarEstado = true;
-    
-    while (adicionarEstado) {
-      let estadoNome = prompt("Digite o nome do estado (ou 'fim' para terminar):");
-      
-      if (estadoNome.toLowerCase() === "fim") {
-        adicionarEstado = false;
-      } else {
-        const estado = {
-          nome: estadoNome,
-          cidades: []
-        };
-        
-        let adicionarCidade = true;
-        
-        while (adicionarCidade) {
-          let cidadeNome = prompt("Digite o nome da cidade (ou 'fim' para terminar):");
-          
-          if (cidadeNome.toLowerCase() === "fim") {
-              adicionarCidade = false;
-            } else {
-                estado.cidades.push(cidadeNome);
-                
-          }
-        }
-        
-        estados.push(estado);
-        break;
-      }
+const prompt = require("prompt-sync");
+const { lerIndiceEstado } = require("./estado");
+
+const cidades = [];
+
+const lerIndiceCidade = () => {
+  listarCidades();
+
+  if (cidades.length > 0) {
+    const indice =
+      prompt("Digite o indice do cidade que você deseja atualizar: ") - 1;
+
+    if (indice >= 0 && indice < cidades.length) {
+      return indice;
+    } else {
+      console.log("Indice inválido");
     }
-    
-    console.log("\nInformações cadastradas:");
-    console.log("País: " + pais);
-    
-    estados.forEach(estado => {
-      console.log("\nEstado: " + estado.nome);
-      console.log("Cidades:");
-      estado.cidades.forEach(cidade => {
-        console.log("- " + cidade);
-      });
+  }
+};
+
+const validarCidade = (cidade) => cidade.nome != "" && cidade.estado != undefined;
+
+const modelo = () => {
+  const nome = prompt("Digite o nome do cidade: ");
+  const estado = lerIndiceEstado();
+
+  if (validarCidade({ nome, estado })) {
+    return { nome, estado };
+  }
+
+  console.log("Dados inválidos");
+};
+
+const criarCidade = () => {
+  const cidade = modelo();
+
+  if (cidade != undefined) {
+    cidades.push(cidade);
+
+    console.log("Cidade criado com sucesso");
+  }
+};
+
+const listarCidades = () => {
+  if (cidades.length == 0) {
+    console.log("Nenhum cidade está cadastrado");
+  } else {
+    cidades.forEach((cidade, indice) => {
+      console.log(indice + 1, cidade);
     });
   }
-  cadastrarPaisEstadoCidade()
+};
+
+const atualizarCidade = () => {
+  const indice = lerIndiceCidade();
+
+  if (indice != undefined) {
+    const cidade = modelo();
+
+    if (cidade != undefined) {
+      cidades[indice] = cidade;
+
+      console.log("Cidade atualizado com sucesso");
+    }
+  }
+};
+
+const removerCidade = () => {
+  const indice = lerIndiceCidade();
+  if (indice != undefined) {
+    cidades.splice(indice, 1);
+
+    console.log("Cidade removido com sucesso");
+  }
+};
+
+module.exports = {
+  criarCidade,
+  listarCidades,
+  atualizarCidade,
+  removerCidade,
+};
