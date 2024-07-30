@@ -1,74 +1,82 @@
 const prompt = require("prompt-sync");
+const { lerIndiceEstado } = require("./estado");
 
-const paises = [];
+const cidades = [];
 
-const lerIndicePais = () => {
-  listarPaises();
+const lerIndiceCidade = () => {
+  listarCidades();
 
-  if (paises.length > 0) {
+  if (cidades.length > 0) {
     const indice =
-      prompt("Digite o indice do pais que você deseja atualizar: ") - 1;
-    if (indice >= 0 && indice < paises.length) {
+      prompt("Digite o indice do cidade que você deseja atualizar: ") - 1;
+
+    if (indice >= 0 && indice < cidades.length) {
       return indice;
     } else {
       console.log("Indice inválido");
     }
   }
 };
-const validarPais = (pais) => pais.nome != "" && pais.sigla.length == 2;
+
+const validarCidade = (cidade) => cidade.nome != "" && cidade.estado != undefined;
+
 const modelo = () => {
-  const nome = prompt("Digite o nome do país: ");
-  const sigla = prompt("Digite a sigla do país: ").toUpperCase();
-  if (validarPais({ nome, sigla })) {
-    return { nome, sigla };
+  const nome = prompt("Digite o nome do cidade: ");
+  const estado = lerIndiceEstado();
+
+  if (validarCidade({ nome, estado })) {
+    return { nome, estado };
   }
+
   console.log("Dados inválidos");
 };
-const criarPais = () => {
-  const pais = modelo();
 
-  if (pais != undefined) {
-    paises.push(pais);
+const criarCidade = () => {
+  const cidade = modelo();
 
-    console.log("Pais criado com sucesso");
+  if (cidade != undefined) {
+    cidades.push(cidade);
+
+    console.log("Cidade criado com sucesso");
   }
 };
-const listarPaises = () => {
-  if (paises.length == 0) {
-    console.log("Nenhum pais está cadastrado");
-    return false
+
+const listarCidades = () => {
+  if (cidades.length == 0) {
+    console.log("Nenhum cidade está cadastrado");
   } else {
-    paises.forEach((pais, indice) => {
-      console.log(indice + 1, pais);
+    cidades.forEach((cidade, indice) => {
+      console.log(indice + 1, cidade);
     });
-    return true
   }
 };
 
-const atualizarPais = () => {
-  const indice = lerIndicePais();
+const atualizarCidade = () => {
+  const indice = lerIndiceCidade();
 
   if (indice != undefined) {
-    const pais = modelo();
-    if (pais != undefined) {
-      paises[indice] = pais;
-      console.log("Pais atualizado com sucesso");
+    const cidade = modelo();
+
+    if (cidade != undefined) {
+      cidades[indice] = cidade;
+
+      console.log("Cidade atualizado com sucesso");
     }
   }
 };
 
-const removerPais = () => {
-  const indice = lerIndicePais();
+const removerCidade = () => {
+  const indice = lerIndiceCidade();
   if (indice != undefined) {
-    paises.splice(indice, 1);
+    cidades.splice(indice, 1);
 
-    console.log("Pais removido com sucesso");
+    console.log("Cidade removido com sucesso");
   }
 };
+
 module.exports = {
-    criarPais,
-    listarPaises,
-    atualizarPais,
-    removerPais,
-    lerIndicePais
-}
+  criarCidade,
+  listarCidades,
+  atualizarCidade,
+  removerCidade,
+};
