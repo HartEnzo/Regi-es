@@ -1,6 +1,7 @@
 const prompt = require("prompt-sync")()
-const {criarPais, listarPaises, atualizarPais, removerPais, lerIndicePais } = require("./pais.js");
- while(true) {
+const {criarPais, listarPaises, atualizarPais, removerPais, lerIndicePais} = require("./pais.js");
+
+while(true) {
     console.log(`
     1 - Criar
     2 - Listar
@@ -36,4 +37,5 @@ const {criarPais, listarPaises, atualizarPais, removerPais, lerIndicePais } = re
         break;
     }
     };
+
 
